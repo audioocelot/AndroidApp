@@ -14,6 +14,7 @@ import android.net.Uri;
 import android.os.Binder;
 import android.os.PowerManager;
 import android.util.Log;
+import java.io.File;
 
 public class MusicService extends Service implements MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener, MediaPlayer.OnCompletionListener {
 
@@ -118,4 +119,14 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         songPosn=songIndex;
     }
 
+    public File getSongFile(int songIndex) {
+        Song playSong = songs.get(songIndex);
+        long currSong = playSong.getID();
+        Uri trackUri = ContentUris.withAppendedId(
+                android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                currSong);
+
+        File songFile = new File(trackUri.getPath());
+        return songFile;
+    }
 }

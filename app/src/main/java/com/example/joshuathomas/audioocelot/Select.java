@@ -4,9 +4,14 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
+
 import android.net.Uri;
 import android.content.ContentResolver;
 import android.database.Cursor;
@@ -121,7 +126,28 @@ public class Select extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
 
                 musicSrv.setSong(Integer.parseInt(view.getTag().toString()));
+
                 //send to server
+                String charset = "UTF-8";
+                File uploadFile1 = musicSrv.getSongFile(Integer.parseInt(view.getTag().toString()));
+
+                String requestURL = "https://ocelot.audio/upload/";
+
+                try {
+                    MultipartUtility multipart = new MultipartUtility(requestURL, charset);
+
+                    multipart.addFilePart("audio", uploadFile1);
+
+                    List<String> response = multipart.finish();
+
+                    System.out.println("SERVER REPLIED:");
+
+                    for (String line : response) {
+                        System.out.println(line);
+                    }
+                } catch (IOException ex) {
+                    System.err.println(ex);
+                }
 
             }
         }).setPositiveButton("Stop Song", new DialogInterface.OnClickListener() {
