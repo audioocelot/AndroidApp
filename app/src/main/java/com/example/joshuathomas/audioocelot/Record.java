@@ -31,8 +31,10 @@ public class Record extends AppCompatActivity {
 
         stop.setEnabled(false);
         play.setEnabled(false);
+        Long tsLong = System.currentTimeMillis()/1000;
+        String ts = tsLong.toString();
         outputFile = Environment.getExternalStorageDirectory()
-                .getAbsolutePath() + "/myrecording.3gp";
+                .getAbsolutePath() + "/" + ts + ".wav";
         ;
 
 

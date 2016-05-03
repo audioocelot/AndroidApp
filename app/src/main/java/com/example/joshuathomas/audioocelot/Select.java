@@ -2,6 +2,8 @@ package com.example.joshuathomas.audioocelot;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.os.AsyncTask;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -98,12 +100,15 @@ public class Select extends AppCompatActivity {
                     (android.provider.MediaStore.Audio.Media._ID);
             int artistColumn = musicCursor.getColumnIndex
                     (android.provider.MediaStore.Audio.Media.ARTIST);
+            int filePathColumn = musicCursor.getColumnIndex(android.provider.MediaStore.Audio.Media.DATA);
+
             //add songs to list
             do {
                 long thisId = musicCursor.getLong(idColumn);
                 String thisTitle = musicCursor.getString(titleColumn);
                 String thisArtist = musicCursor.getString(artistColumn);
-                songList.add(new Song(thisId, thisTitle, thisArtist));
+                String filePath = musicCursor.getString(filePathColumn);
+                songList.add(new Song(thisId, thisTitle, thisArtist, filePath));
             }
             while (musicCursor.moveToNext());
         }
@@ -126,28 +131,12 @@ public class Select extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
 
                 musicSrv.setSong(Integer.parseInt(view.getTag().toString()));
-
-                //send to server
-                String charset = "UTF-8";
                 File uploadFile1 = musicSrv.getSongFile(Integer.parseInt(view.getTag().toString()));
-
-                String requestURL = "https://ocelot.audio/upload/";
-
-                try {
-                    MultipartUtility multipart = new MultipartUtility(requestURL, charset);
-
-                    multipart.addFilePart("audio", uploadFile1);
-
-                    List<String> response = multipart.finish();
-
-                    System.out.println("SERVER REPLIED:");
-
-                    for (String line : response) {
-                        System.out.println(line);
-                    }
-                } catch (IOException ex) {
-                    System.err.println(ex);
+                if (uploadFile1.exists()) {
+                    System.out.println("The song exists");
                 }
+                new GetData().execute(uploadFile1);
+
 
             }
         }).setPositiveButton("Stop Song", new DialogInterface.OnClickListener() {
@@ -192,5 +181,43 @@ public class Select extends AppCompatActivity {
         super.onDestroy();
     }
 
+  class GetData extends AsyncTask<File, Void, List<String>> {
+
+        private Exception exception;
+
+      protected List<String> doInBackground(File... file) {
+            //send to server
+            List<String> response = new ArrayList<String>() ;
+            String charset = "UTF-8";
+
+
+            String requestURL = "https://ocelot.audio/upload";
+
+            try {
+                MultipartUtility multipart = new MultipartUtility(requestURL, charset);
+
+                System.out.println(file[0]);
+                multipart.addFilePart("audio", file[0]);
+
+                response = multipart.finish();
+
+                System.out.println("SERVER REPLIED:");
+
+                for (String line : response) {
+                    System.out.println("myResponse");
+                    System.out.println(line);
+                }
+            } catch (IOException ex) {
+                System.out.println("myError:");
+                System.err.println(ex);
+            }
+            return response;
+        }
+
+        protected void onPostExecute(List<String> response) {
+            System.out.println("myAfterExecute");
+            System.out.println(response);
+        }
+    }
 
 }

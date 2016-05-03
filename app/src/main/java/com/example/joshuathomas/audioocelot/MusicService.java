@@ -54,6 +54,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
 
         try{
             player.setDataSource(getApplicationContext(), trackUri);
+
         }
         catch(Exception e){
             Log.e("MUSIC SERVICE", "Error setting data source", e);
@@ -122,11 +123,19 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
     public File getSongFile(int songIndex) {
         Song playSong = songs.get(songIndex);
         long currSong = playSong.getID();
-        Uri trackUri = ContentUris.withAppendedId(
-                android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-                currSong);
+//        Uri trackUri = ContentUris.withAppendedId(
+//                MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+//                currSong);
 
-        File songFile = new File(trackUri.getPath());
-        return songFile;
+
+        File sf = new File(playSong.getFilePath());
+        if (sf.exists()) {
+            System.out.println("Song exists");
+        } else {
+            System.out.println("No song");
+        }
+        return sf;
+
+
     }
 }
