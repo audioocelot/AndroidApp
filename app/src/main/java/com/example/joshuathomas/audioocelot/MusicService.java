@@ -116,6 +116,11 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         mp.start();
     }
 
+    public void stopsong(){
+        player.stop();
+
+    }
+
     public void setSong(int songIndex){
         songPosn=songIndex;
     }

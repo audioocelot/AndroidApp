@@ -146,7 +146,7 @@ public class Select extends AppCompatActivity {
                 musicSrv.setSong(Integer.parseInt(view.getTag().toString()));
                 //if song is playing, stop it
 
-                musicSrv.onDestroy();
+                musicSrv.stopsong();
 
             }
         })
@@ -217,6 +217,18 @@ public class Select extends AppCompatActivity {
         protected void onPostExecute(List<String> response) {
             System.out.println("myAfterExecute");
             System.out.println(response);
+
+//            Toast.makeText(getApplicationContext(), "received",
+//                    Toast.LENGTH_SHORT).show();
+
+
+            Intent intent = new Intent(Select.this, Results.class);
+            Bundle b = new Bundle();
+            b.putStringArrayList("result", (ArrayList<String>) response);
+            intent.putExtras(b); //Put your id to your next Intent
+            startActivity(intent);
+            finish();
+
         }
     }
 
