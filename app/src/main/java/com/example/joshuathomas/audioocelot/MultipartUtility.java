@@ -3,6 +3,13 @@ package com.example.joshuathomas.audioocelot;
 /**
  * Created by dalewinston on 4/29/16.
  */
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 
 import java.io.File;
@@ -12,11 +19,13 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * This utility class provides an abstraction layer for sending multipart HTTP
@@ -31,6 +40,7 @@ public class MultipartUtility {
     private String charset;
     private OutputStream outputStream;
     private PrintWriter writer;
+    private JSONArray jsonArray;
 
     /**
      * This constructor initializes a new HTTP POST request with content type
@@ -136,18 +146,30 @@ public class MultipartUtility {
 
         // checks server's status code first
         int status = httpConn.getResponseCode();
+        System.out.println(jsonArray);
         if (status == HttpURLConnection.HTTP_OK) {
             BufferedReader reader = new BufferedReader(new InputStreamReader(
                     httpConn.getInputStream()));
             String line = null;
+            StringBuilder stringBuilder = new StringBuilder();
+
+            String jsonString = "";
             while ((line = reader.readLine()) != null) {
                 response.add(line);
+                stringBuilder.append(line);
+
             }
+            jsonString = stringBuilder.toString();
+            Gson gson = new Gson();
+            //gson.toJson(jsonString);
+//            System.out.println(gson);
+            String json = gson.toJson(jsonString);
             reader.close();
             httpConn.disconnect();
         } else {
             throw new IOException("Server returned non-OK status: " + status);
         }
+
 
         return response;
     }

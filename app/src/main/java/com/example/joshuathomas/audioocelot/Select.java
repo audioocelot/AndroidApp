@@ -204,7 +204,6 @@ public class Select extends AppCompatActivity {
                 System.out.println("SERVER REPLIED:");
 
                 for (String line : response) {
-                    System.out.println("myResponse");
                     System.out.println(line);
                 }
             } catch (IOException ex) {
