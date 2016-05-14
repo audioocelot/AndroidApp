@@ -155,25 +155,6 @@ public class Select extends AppCompatActivity {
 
     }
 
-        //create button to stop song from playing
-
-   /* @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        //menu item selected
-        switch (item.getItemId()) {
-            case R.id.action_shuffle:
-                //shuffle
-                break;
-            case R.id.action_end:
-                stopService(playIntent);
-                musicSrv=null;
-                System.exit(0);
-                break;
-        }
-        return super.onOptionsItemSelected(item);
-
-    } */
-
     @Override
     protected void onDestroy() {
         stopService(playIntent);
