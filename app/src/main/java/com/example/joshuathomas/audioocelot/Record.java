@@ -44,8 +44,8 @@ public class Record extends AppCompatActivity {
         Long tsLong = System.currentTimeMillis()/1000;
         String ts = tsLong.toString();
         outputFile = Environment.getExternalStorageDirectory()
-                .getAbsolutePath() + "/" + ts + ".wav";
-        ;
+                .getAbsolutePath() + "/" + ts + ".mp4";
+
 
 
         // 1. Create a MediaRecorder object
@@ -82,7 +82,7 @@ public class Record extends AppCompatActivity {
                 Toast.LENGTH_LONG).show();
 
 
-        CountDownTimer cdt = new CountDownTimer(30000, 1000) {
+        CountDownTimer cdt = new CountDownTimer(21000, 1000) {
 
             public void onTick(long millisUntilFinished) {
 
