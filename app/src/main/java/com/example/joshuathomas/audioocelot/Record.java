@@ -21,7 +21,9 @@ public class Record extends AppCompatActivity {
 
     private MediaRecorder myAudioRecorder;
     private String outputFile = null;
-    private Button start, submit, play;
+    private Button start, submit, play, stop;
+
+    MediaPlayer m = new MediaPlayer();
 
     File rec_file;
 
@@ -38,9 +40,11 @@ public class Record extends AppCompatActivity {
         start = (Button) findViewById(R.id.button1);
         submit = (Button) findViewById(R.id.button2);
         play = (Button) findViewById(R.id.button3);
+        stop = (Button) findViewById(R.id.button4);
 
         submit.setEnabled(false);
         play.setEnabled(false);
+        stop.setEnabled(false);
         Long tsLong = System.currentTimeMillis()/1000;
         String ts = tsLong.toString();
         outputFile = Environment.getExternalStorageDirectory()
@@ -107,9 +111,10 @@ public class Record extends AppCompatActivity {
 
 
                 //set up the recorded audio as file to be submitted
-                MediaPlayer m = new MediaPlayer();
+                //MediaPlayer m = new MediaPlayer();
                 try {
                     m.setDataSource(outputFile);
+                    m.prepare();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -136,33 +141,33 @@ public class Record extends AppCompatActivity {
     public void play(View view) throws IllegalArgumentException,
             SecurityException, IllegalStateException, IOException {
 
-        MediaPlayer m = new MediaPlayer();
-        m.setDataSource(outputFile);
-        m.prepare();
+       stop.setEnabled(true);
+        play.setEnabled(false);
+//        m.setDataSource(outputFile);
+//        m.prepare();
         m.start();
         Toast.makeText(getApplicationContext(), "Playing audio",
                 Toast.LENGTH_LONG).show();
 
     }
 
+    public void stop(View view) throws IOException {
+
+        if (m != null) {
+            stop.setEnabled(false);
+            play.setEnabled(true);
+
+            m.stop();
+            m.prepare();
+        }
+    }
 
     public void submit(View view) {
-//		/*This method stops the recording process.*/
-//        myAudioRecorder.stop();
-//
-//		/*This method should be called when the recorder instance is needed.*/
-//        myAudioRecorder.release();
-//        myAudioRecorder = null;
-//        submit.setEnabled(false);
-//        play.setEnabled(true);
-//        Toast.makeText(getApplicationContext(), "Audio recorded successfully",
-//                Toast.LENGTH_LONG).show();
 
+        m.stop();
 
-
-        //musicSrv.setSong(Integer.parseInt(view.getTag().toString()));     //put this in onFinish
-
-        //File uploadFile1 = musicSrv.getSongFile();
+        Toast.makeText(getApplicationContext(), "Sending data",
+                Toast.LENGTH_LONG).show();
 
         File uploadFile1 = rec_file;
         if (uploadFile1.exists()) {

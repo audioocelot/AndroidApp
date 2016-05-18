@@ -130,6 +130,9 @@ public class Select extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
+                Toast.makeText(getApplicationContext(), "Sending data",
+                        Toast.LENGTH_LONG).show();
+
                 musicSrv.setSong(Integer.parseInt(view.getTag().toString()));
                 File uploadFile1 = musicSrv.getSongFile(Integer.parseInt(view.getTag().toString()));
                 if (uploadFile1.exists()) {
@@ -168,6 +171,8 @@ public class Select extends AppCompatActivity {
 
       protected List<String> doInBackground(File... file) {
             //send to server
+
+
             List<String> response = new ArrayList<String>() ;
             String charset = "UTF-8";
 
