@@ -17,6 +17,8 @@ public class Song extends AppCompatActivity {
     }
 
     public Song(long songID, String songTitle, String songArtist, String filePath) {
+        super();
+
         id=songID;
         title=songTitle;
         artist=songArtist;
