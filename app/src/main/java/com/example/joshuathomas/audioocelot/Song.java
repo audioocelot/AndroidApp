@@ -17,12 +17,15 @@ public class Song extends AppCompatActivity {
     }
 
     public Song(long songID, String songTitle, String songArtist, String filePath) {
-        super();
 
         id=songID;
         title=songTitle;
         artist=songArtist;
         this.filePath = filePath;
+    }
+
+    public Song(){
+        super();
     }
 
     public long getID(){return id;}

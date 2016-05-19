@@ -52,10 +52,13 @@ public class SongAdapter extends BaseAdapter{
     }
 
     public SongAdapter(Context c, ArrayList<Song> theSongs){
-        super();
 
         songs=theSongs;
         songInf=LayoutInflater.from(c);
+    }
+
+    public SongAdapter(){
+        super();
     }
 
 }
